@@ -1,6 +1,8 @@
 import {useState} from 'react';
-import Dice from './Dice';
 import Button from './Button';
+import Board from './Board';
+import logoImg from './assets/logo.png';
+import './App.css';
 
 // 1 ~ n까지의 숫자중 랜덤으로 뽑아줌
 function random(n){
@@ -8,40 +10,42 @@ function random(n){
 }
 
 function App() {
-    const [num, setNum] = useState(1);
-    const [sum, setSum] = useState(0);
-    const [gameHistory, setGameHistory] = useState([]);
+    const [myHistory, setMyHistory] = useState([]);
+    const [otherHistory, setOtherHistory] = useState([]);
 
     const handelRollClick = () => {
-        const nextNum = random (6);
-        setNum(nextNum);
-        setSum(sum + nextNum);
-        setGameHistory([...gameHistory, nextNum]);
-        // 새로운 값을 만들어서 변경 해줘야한다.
+        const nextMyNum = random (6);
+        const nextOtherNum = random (6);
+        setMyHistory([...myHistory, nextMyNum]);
+        setOtherHistory([...otherHistory, nextOtherNum]);
     }
 
     const handelClearClick = () => {
-        setNum(1);
-        setNum(0);
-        setGameHistory([]);
+        setMyHistory([]);
+        setOtherHistory([])
     }
 
     return (
-    <div>
+        <div className="App">
         <div>
-            <Button onClick={handelRollClick}>던지기</Button>
-            <Button onClick={handelClearClick}>처음부터</Button>
-        </div>
+            <img className="App-logo" src={logoImg} alt="주사위게임 로고" />
+            <h1 className="App-title">주사위게임</h1>
         <div>
-            <h2>나</h2>
-            <Dice color="red" num={num}/>
-            <h2>총점</h2>
-            <p>{sum}</p>
-            <h2>기록</h2>
-            <p>{gameHistory.join(', ')}</p>
+          <Button className="App-button" onClick={handelRollClick} color="blue">던지기</Button>
+          <Button className="App-button" onClick={handelClearClick} color="red">처음부터</Button>
         </div>
+      </div>
+      <div className="App-boards">
+        <div className="Board App-board">
+          <h2 className="Board-heading">나</h2>
+          <Board name="나" color="blue" gameHistory={myHistory}/>
+        </div>
+        <div className="Board App-board">
+          <h2 className="Board-heading">상대</h2>
+          <Board name="상대" color="red" gameHistory={otherHistory}/>
+        </div>
+      </div>
     </div>
-
     );
 }
 
